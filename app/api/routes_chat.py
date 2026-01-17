@@ -69,7 +69,7 @@ async def chat(req: ChatRequest, request: Request) -> ChatResponse:
     else:
         history = store.get_history(session_id, limit=settings.MAX_HISTORY)
 
-    system_prompt = build_system_prompt(state, target_emotion=emotion.label)
+    system_prompt = build_system_prompt(state, target_emotion=emotion.label, user_text=req.user_text, is_premium=getattr(req, 'is_premium', False))
     messages = build_chat_messages(system_prompt=system_prompt, history=history, user_text=req.user_text)
     prompt = build_generate_prompt(history=history, user_text=req.user_text)
 
@@ -126,7 +126,7 @@ async def chat_stream(req: ChatRequest, request: Request):
     else:
         history = store.get_history(session_id, limit=settings.MAX_HISTORY)
 
-    system_prompt = build_system_prompt(state, target_emotion=emotion.label)
+    system_prompt = build_system_prompt(state, target_emotion=emotion.label, user_text=req.user_text, is_premium=getattr(req, 'is_premium', False))
     messages = build_chat_messages(system_prompt=system_prompt, history=history, user_text=req.user_text)
     prompt = build_generate_prompt(history=history, user_text=req.user_text)
 
@@ -199,7 +199,7 @@ async def ws_chat(ws: WebSocket):
             else:
                 history = store.get_history(session_id, limit=settings.MAX_HISTORY)
 
-            system_prompt = build_system_prompt(state, target_emotion=emotion.label)
+            system_prompt = build_system_prompt(state, target_emotion=emotion.label, user_text=req.user_text, is_premium=getattr(req, 'is_premium', False))
             messages = build_chat_messages(system_prompt=system_prompt, history=history, user_text=req.user_text)
             prompt = build_generate_prompt(history=history, user_text=req.user_text)
 

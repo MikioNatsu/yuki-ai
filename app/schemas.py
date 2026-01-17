@@ -63,6 +63,7 @@ class ChatRequest(BaseModel):
         validation_alias=AliasChoices("user_text", "message", "prompt", "text"),
     )
     history: Optional[List[HistoryMessage]] = None
+    is_premium: bool = False
 
     @field_validator("session_id")
     @classmethod
